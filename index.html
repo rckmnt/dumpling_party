@@ -6,7 +6,9 @@
     <link rel="stylesheet" type="text/css" href="styles.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <script src="./gsheets.js"></script>
+<!--    <script src="./gsheets.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="goodSheet.js"></script>
   </head>
   <body>
     <div class="content">
@@ -178,40 +180,48 @@
 
 
 
-      function getRandomObject (size) {
-        // get random object from spreadsheet
-        rowNum = getRandomIntInclusive(0,1275);
-
-         gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: '1foyvTSK-leVKO8fDnGr0r45mKhcvHRQmHm0RDOA3wDU',
-            range: 'Sheet1!A1:A2141',
-        }).then(function(response) {
-
-          var range = response.result;
-          if (range.values.length > 0) {
-            genericObject = range.values[rowNum - 1]
-            printObjectWord(genericObject);
-            console.log(genericObject + ": Row " + rowNum + " is sized " + size)
-
-          } else {
-            printObjectWord('No objects found.');
-          }
-        }, function(response) {
-          appendPre('Error: ' + response.result.error.message);
-        });
-
-        // return it's text and line in the sheet
+      function getRandomObject () {
+        getColumn("word", wordCallback); 
       }
 
+      function wordCallback(words) {
+          console.log(words); 
+          console.log("AH"); 
+          chosenWord = ""; 
+          rowNum = 0; 
+          if (words.length > 0) {
+            var times = 0; 
+            while (chosenWord === "" && times < 10) {
+              times += 1; 
+              console.log("WORD");
+              var numWords = words.length; 
+              var rand = Math.floor(Math.random()*numWords);
+              if (rand > 0 && rand < words.length) {
+                chosenWord = words[rand];
+                rowNum = rand; 
+              }
+              setTimeout(function () {
+              }, 40); 
+            }
+          } else {
+            console.error("NO WORDS"); 
+          }
+          genericObject = chosenWord; 
+          printObjectWord(genericObject);
+      
+          return;
+        // return it's text and line in the sheet
+      }
+      
       function reply_click(clicked_id) {
         size = clicked_id;
         // get size from click
 
         // put it in the spreadsheet
-        pushSize(rowNum, size, rowNum, "RAW", size);
+        pushSize(rowNum, size, chosenWord);
 
         // get a new one
-        getRandomObject(size);
+        getRandomObject();
 
         return(size)
       }
@@ -220,96 +230,9 @@
 
 
 
-      function pushSize(rowIndex, size, range, valueInputOption, _values) {
-
-        var cell = "Sheet1!C" + rowIndex;
-        var values = [
-          [
-            size   // Cell values ...
-          ],
-          // Additional rows ...
-        ];
-        var data = [];
-        data.push({
-          range: cell,
-          values: values
-        });
-        // Additional ranges to update.
-
-        var body = {data: data, valueInputOption: valueInputOption};
-
-        gapi.client.sheets.spreadsheets.values.batchUpdate({
-           spreadsheetId: '1foyvTSK-leVKO8fDnGr0r45mKhcvHRQmHm0RDOA3wDU',
-           resource: body
-        }).then((response) => {
-          var result = response.result;
-          console.log(`${result.totalUpdatedCells} cells updated.`);
-        });
+      function pushSize(rowNum, size, chosenWord) {
+        postToSheet(chosenWord, size, "all");
       }
-
-
-
-
-
-
-
-
-
-
-
-      // ################################################################################################
-      //   GOOGLE SHEETS EXAMPLE
-      // ################################################################################################
-
-      function batchUpdateValues(spreadsheetId, range, valueInputOption, _values, callback) {
-
-        var values = [
-          [
-            // Cell values ...
-          ],
-          // Additional rows ...
-        ];
-        var data = [];
-        data.push({
-          range: range,
-          values: values
-        });
-        // Additional ranges to update.
-
-        var body = {data: data, valueInputOption: valueInputOption};
-
-        gapi.client.sheets.spreadsheets.values.batchUpdate({
-           spreadsheetId: spreadsheetId,
-           resource: body
-        }).then((response) => {
-          var result = response.result;
-          console.log(`${result.totalUpdatedCells} cells updated.`);
-        });
-      }
-
-      function appendValues(spreadsheetId, range, valueInputOption, _values, callback) {
-        var values = [
-          [
-            // Cell values ...
-          ],
-          // Additional rows ...
-        ];
-        var body = {
-          values: values
-        };
-        gapi.client.sheets.spreadsheets.values.append({
-           spreadsheetId: spreadsheetId,
-           range: range,
-           valueInputOption: valueInputOption,
-           resource: body
-        }).then((response) => {
-          var result = response.result;
-          console.log(`${result.updates.updatedCells} cells appended.`)
-        });
-      }
-
-
-
       /**
        * Append a pre element to the body containing the given message
        * as its text node. Used to display the results of the API call.
@@ -322,129 +245,7 @@
         pre.appendChild(textContent);
       }
 
-      /**
-       * Print the names and majors of students in a sample spreadsheet:
-       * Example
-       * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
-       * Scott Corpus
-       * 1foyvTSK-leVKO8fDnGr0r45mKhcvHRQmHm0RDOA3wDU
-       */
 
-      function listMajors() {
-        gapi.client.sheets.spreadsheets.values.get({
-          spreadsheetId: '1foyvTSK-leVKO8fDnGr0r45mKhcvHRQmHm0RDOA3wDU',
-          range: 'Sheet1!A2:E',
-        }).then(function(response) {
-          var range = response.result;
-          if (range.values.length > 0) {
-            appendPre('General Object, Size:');
-            for (i = 0; i < range.values.length; i++) {
-              var row = range.values[i];
-              // Print columns A and E, which correspond to indices 0 and 4.
-              appendPre(row[0] + ', ' + row[1]);
-            }
-          } else {
-            appendPre('No data found.');
-          }
-        }, function(response) {
-          appendPre('Error: ' + response.result.error.message);
-        });
-      }
-
-
-
-
-
-
-
-
-
-      // ################################################################################################
-      //   BASIC GOOGLE SHEETS API
-      // ################################################################################################
-
-
-      // Client ID and API key from the Developer Console
-      var CLIENT_ID = '95647728501-ompk4ftp11roa87evpul52iafmn6tljm.apps.googleusercontent.com';
-      var API_KEY = 'AIzaSyBNrk_56I5apbswONP5DDQ8Rm9tFZWgBG4';
-
-      // Array of API discovery doc URLs for APIs used by the quickstart
-      var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
-
-      // Authorization scopes required by the API; multiple scopes can be
-      // included, separated by spaces.
-      var SCOPES = "https://www.googleapis.com/auth/spreadsheets";
-
-      var authorizeButton = document.getElementById('authorize-button');
-      var signoutButton = document.getElementById('signout-button');
-
-      /**
-       *  On load, called to load the auth2 library and API client library.
-       */
-      function handleClientLoad() {
-        gapi.load('client:auth2', initClient);
-      }
-
-      /**
-       *  Initializes the API client library and sets up sign-in state
-       *  listeners.
-       */
-      function initClient() {
-        gapi.client.init({
-          apiKey: API_KEY,
-          clientId: CLIENT_ID,
-          discoveryDocs: DISCOVERY_DOCS,
-          scope: SCOPES
-        }).then(function () {
-          // Listen for sign-in state changes.
-          gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-
-          // Handle the initial sign-in state.
-          updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-          authorizeButton.onclick = handleAuthClick;
-          signoutButton.onclick = handleSignoutClick;
-        });
-      }
-
-      /**
-       *  Called when the signed in status changes, to update the UI
-       *  appropriately. After a sign-in, the API is called.
-       */
-      function updateSigninStatus(isSignedIn) {
-        if (isSignedIn) {
-          authorizeButton.style.display = 'none';
-          signoutButton.style.display = 'block';
-          getRandomObject();
-        } else {
-          authorizeButton.style.display = 'block';
-          signoutButton.style.display = 'none';
-        }
-      }
-
-      /**
-       *  Sign in the user upon button click.
-       */
-      function handleAuthClick(event) {
-        gapi.auth2.getAuthInstance().signIn();
-      }
-
-      /**
-       *  Sign out the user upon button click.
-       */
-      function handleSignoutClick(event) {
-        gapi.auth2.getAuthInstance().signOut();
-      }
-
-
-
-
-
-    </script>
-
-
-    <script async defer src="https://apis.google.com/js/api.js"
-      onload="this.onload=function(){};handleClientLoad()"
-      onreadystatechange="if (this.readyState === 'complete') this.onload()" id="">
     </script>
   </body>
 </html>
