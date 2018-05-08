@@ -22,8 +22,14 @@ body{
 
 
 p {
-    size:.7em;
+    size: 0.8em;
     text-align: center;
+}
+strong p{
+    /*size:.7em;*/
+    font-size: 14px;
+    text-align: center;
+    font-weight: bold;
 }
 
 
@@ -49,12 +55,23 @@ button{
 }
 
 button p{
-    font-size: 0.6em;
+    font-size: 0.7em;
+    text-align: center;
+   /* margin-left: -100%;
+    margin-right: -100%;*/
+}
+
+button strong{
+    font-size: 0.9em;
+    text-align: center;
+    font-style: bold;
+    margin-left: -100%;
+    margin-right: -100%;
 }
 
 .button-container {
   height: 300px;
-  /*margin: auto;*/
+  font-size: 0.8em;
   flex-grow: 1;
   /*flex-basis: 10%;*/
   justify-content: space-between;
