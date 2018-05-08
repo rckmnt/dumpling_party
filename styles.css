@@ -22,25 +22,26 @@ body{
 
 
 p {
-    size: 1.6em;
+    font-size: 20px;
     text-align: center;
 }
 strong p{
     /*size:.7em;*/
-    font-size: 20px;
+    font-size: 22px;
     text-align: center;
     font-weight: bold;
 }
 
 
 #genericObject{
-    size: 7em;
+    /*font-size: 30px;*/
     margin: auto;
     text-align: center;
     padding-bottom: 50px;
 }
 
 #genericObject h1{
+    font-size: 60px;
     vertical-align: center;
 }
 

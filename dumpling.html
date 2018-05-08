@@ -115,7 +115,7 @@
           <p>I don't know.</p>
           <p>What is this?</p>
           <!-- </ul> -->
-          <p>I'm unsure</p>
+          <strong>I'm unsure</strong>
           </button>
 
       </br>
@@ -129,26 +129,17 @@
           <button id="signout-button" class="btn btn-default" style="display: none;">Sign Out</button>
         </div>
 
-      <pre id="content"></pre>
+        <pre id="precontent"></pre>
 
       </div>
-
-
-
     </div>
 
 
 
+
+
+
     <script type="text/javascript">
-
-
-
-
-
-
-
-
-
 
 
 
@@ -180,11 +171,13 @@
 
       function getRandomObject (size) {
         // get random object from spreadsheet
-        rowNum = getRandomIntInclusive(0,1275);
+        var totalWords = 2141
+
+        rowNum = getRandomIntInclusive(0,totalWords);
 
          gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: '1foyvTSK-leVKO8fDnGr0r45mKhcvHRQmHm0RDOA3wDU',
-            range: 'Sheet1!A1:A2141',
+            range: 'Sheet1!A1:A' + totalWords,
         }).then(function(response) {
 
           var range = response.result;
@@ -192,7 +185,7 @@
             genericObject = range.values[rowNum - 1]
             printObjectWord(genericObject);
             console.log(genericObject + ": Row " + rowNum + " is sized " + size)
-
+            appendPre("You labelled a " + genericObject + " (" + rowNum + ") as sized " + size);
           } else {
             printObjectWord('No objects found.');
           }
@@ -317,7 +310,7 @@
        * @param {string} message Text to be placed in pre element.
        */
       function appendPre(message) {
-        // var pre = document.getElementById('content');
+        var pre = document.getElementById('precontent');
         var textContent = document.createTextNode(message + '\n');
         pre.appendChild(textContent);
       }
