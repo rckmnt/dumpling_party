@@ -4,6 +4,7 @@
     <title>How Big is a...</title>
     <meta charset='utf-8' />
     <link rel="stylesheet" type="text/css" href="styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="./gsheets.js"></script>
   </head>
@@ -39,8 +40,8 @@
           <button type="button" onclick="reply_click(this.id)" class="col btn btn-default" id="3">
           <h4>3</h4>
           <!-- <ul> -->
-          <p>Index Finger</p>
-          <p>Glue Stick</p>
+          <p>Index finger</p>
+          <p>Glue stick</p>
           <!-- </ul> -->
           <p>~80mm</p>
           </button>
@@ -66,8 +67,8 @@
           <button type="button" onclick="reply_click(this.id)" class="col btn btn-default" id="6">
           <h4>6</h4>
           <!-- <ul> -->
-          <p>Full arm length</p>
-          <p>Golden Retriever</p>
+          <p>Arm length</p>
+          <p>Labrador dog</p>
           <!-- </ul> -->
           <p>~1m</p>
           </button>
@@ -85,7 +86,7 @@
           <h4>8</h4>
           <!-- <ul> -->
           <p>Car</p>
-          <p>Pickup Truck</p>
+          <p>Pickup truck</p>
           <!-- </ul> -->
           <p>~4m</p>
           </button>
@@ -94,7 +95,7 @@
           <h4>9</h4>
           <!-- <ul> -->
           <p>House</p>
-          <p>Large Tree</p>
+          <p>Large tree</p>
           <!-- </ul> -->
           <p>~10m</p>
           </button>
@@ -103,9 +104,18 @@
           <h4>10</h4>
           <!-- <ul> -->
           <p>Football field</p>
-          <p>School building</p>
+          <p>Hospital</p>
           <!-- </ul> -->
           <p>~50m+</p>
+          </button>
+
+          <button type="button" onclick="reply_click(this.id)" class="col btn btn-default" id="?">
+          <h4>?</h4>
+          <!-- <ul> -->
+          <p>I don't know.</p>
+          <p>What is this?</p>
+          <!-- </ul> -->
+          <p>I'm unsure</p>
           </button>
 
       </br>
@@ -164,8 +174,6 @@
         var textnode = document.createTextNode(message);         // Create a text node
         node.appendChild(textnode);                              // Append the text to <li>
         genericObject.appendChild(node);
-
-
       }
 
 
@@ -176,7 +184,7 @@
 
          gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: '1foyvTSK-leVKO8fDnGr0r45mKhcvHRQmHm0RDOA3wDU',
-            range: 'Sheet1!A1:A1275',
+            range: 'Sheet1!A1:A2141',
         }).then(function(response) {
 
           var range = response.result;
