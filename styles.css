@@ -22,19 +22,19 @@ body{
 
 
 p {
-    size: 0.8em;
+    size: 1.6em;
     text-align: center;
 }
 strong p{
     /*size:.7em;*/
-    font-size: 14px;
+    font-size: 20px;
     text-align: center;
     font-weight: bold;
 }
 
 
 #genericObject{
-    size: 5em;
+    size: 7em;
     margin: auto;
     text-align: center;
     padding-bottom: 50px;
@@ -55,18 +55,18 @@ button{
 }
 
 button p{
-    font-size: 0.7em;
+    font-size: 0.9em;
     text-align: center;
    /* margin-left: -100%;
     margin-right: -100%;*/
 }
 
 button strong{
-    font-size: 0.9em;
+    font-size: 1.2em;
     text-align: center;
     font-style: bold;
-    margin-left: -100%;
-    margin-right: -100%;
+/*    margin-left: -100%;
+    margin-right: -100%;*/
 }
 
 .button-container {
